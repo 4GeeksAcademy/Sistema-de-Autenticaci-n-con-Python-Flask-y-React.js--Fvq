@@ -1,86 +1,43 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+
 import { Context } from "../store/appContext";
 
 export const Signup = () => {
 	const { store, actions } = useContext(Context);
+	const [name,setName]=useState("")
+	const [email,setEmail]=useState("")
+	const[password,setPassword]=useState("")
 
-	// Estados para los campos del formulario
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const add = async (e)=>{
+     e.preventDefault()
+	 let newUser = {
+		name : name,
+		email : email,
+		password : password,
 
-	// Función para manejar el envío del formulario
-	const add = async (e) => {
-		e.preventDefault();
-		let newUser = {
-			name: name,
-			email: email,
-			password: password,
-		};
-
-		let resp = await actions.signup(newUser);
-		console.log(resp);
-
-		// Limpiar campos si la respuesta fue exitosa
-		if (resp) {
-			setName("");
-			setEmail("");
-			setPassword("");
-		} else {
-			alert("Error al registrar el usuario");
-		}
-	};
-
+	}
+	let resp = await actions.signup(newUser)
+	console.log(resp)
+	}
 	return (
 		<div className="container text-primary">
 			<h1>Signup</h1>
-			<form onSubmit={add}>
+			<form>
 				<div className="mb-3">
-					<label htmlFor="signupName" className="form-label">
-						Name
-					</label>
-					<input
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						className="form-control"
-						id="signupName"
-						placeholder="Enter your name"
-					/>
+					<label htmlFor="exampleInputEmail12" className="form-label">Name</label>
+					<input type="text" value={name} onChange={(e)=>setName(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
 				</div>
 				<div className="mb-3">
-					<label htmlFor="signupEmail" className="form-label">
-						Email address
-					</label>
-					<input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						className="form-control"
-						id="signupEmail"
-						placeholder="Enter your email"
-					/>
+					<label htmlFor="exampleInputEmail12" className="form-label">Email address</label>
+					<input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
 				</div>
 				<div className="mb-3">
-					<label htmlFor="signupPassword" className="form-label">
-						Password
-					</label>
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						className="form-control"
-						id="signupPassword"
-						placeholder="Enter your password"
-					/>
+					<label htmlFor="exampleInputPassword12" className="form-label">Password</label>
+					<input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="form-control" id="exampleInputPassword1" />
 				</div>
-				<button type="submit" className="btn btn-primary m-2">
-					Submit
-				</button>
-				<Link to="/login" className="btn btn-link">
-					Already have an account? Login
-				</Link>
+				<button type="button" onClick={(e)=>add(e)} className="btn btn-primary m-2">Submit</button>
+				
 			</form>
 		</div>
 	);

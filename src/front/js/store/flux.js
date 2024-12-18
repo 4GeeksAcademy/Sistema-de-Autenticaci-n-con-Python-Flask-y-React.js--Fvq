@@ -52,29 +52,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			signup: async (newUser) => {
 				try {
+					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "api/signup", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(newUser),
-					});
-			
-					console.log("Signup response:", resp);
-			
-					if (!resp.ok) throw new Error("Failed to create user");
-			
-					const data = await resp.json();
-					console.log("User created successfully:", data);
-					return data;
+						body: JSON.stringify(newUser)
+
+					})
+					console.log(resp.status)
+					return true;
 				} catch (error) {
-					console.error("Error during signup:", error);
-					return null;
+					console.log("Error loading message from backend", error)
+					return false;
 				}
-			}
-			
 			},
-			
 			private: async()=>{
-				const resp = await fetch(process.env.BACKEND_URL + "api/private", {
+				const resp = await fetch(`${process.env.BACKEND_URL}api/private`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
@@ -84,13 +77,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				})
 				const data=await resp.json()
-				if (resp.ok) {
-					setStore({ user: data });
-				} else {
-					setStore({ user: null });
-					console.error("Error al obtener datos privados");
+				if (resp.ok){
+					setStore({user:data})
+					return true
 				}
-				
+				setStore({user:false})
+					return false
 
 			},
 			changeColor: (index, color) => {
@@ -109,6 +101,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			}
 		}
 	};
-
+};
 
 export default getState;
